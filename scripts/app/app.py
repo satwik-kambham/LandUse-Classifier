@@ -2,7 +2,6 @@ import gradio as gr
 import numpy as np
 import onnxruntime as ort
 import torchvision as tv
-from PIL import Image
 from huggingface_hub import hf_hub_download
 
 CATEGORIES = [
@@ -53,7 +52,13 @@ class Classifier:
             {self.session.get_inputs()[0].name: inp},
         )[0]
         probs = np.exp(logits) / np.sum(np.exp(logits))
-        return {category: float(prob) for category, prob in zip(CATEGORIES, probs[0])}
+        return {
+            category: float(prob)
+            for category, prob in zip(
+                CATEGORIES,
+                probs[0],
+            )
+        }
 
 
 model_path = hf_hub_download(
